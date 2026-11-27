@@ -1,0 +1,2 @@
+# Written by the EC2 user data at boot (instance ID and AZ). Not part of the repo.
+instance.json

@@ -1,0 +1,13 @@
+# Local testing:  docker compose up --build   ->  http://localhost:8080
+#
+# The footer shows "local" because there is no instance.json here. To preview
+# the EC2 look, create one:  echo '{"id":"i-test","az":"local-1a"}' > instance.json
+
+services:
+  web:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      # Mount the repo as the web root, just like `git clone ... /var/www/html` on EC2.
+      - ./:/usr/local/apache2/htdocs

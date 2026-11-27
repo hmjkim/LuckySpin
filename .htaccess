@@ -1,0 +1,27 @@
+# Lucky Spin – Apache rules.
+# Apache only reads this file when "AllowOverride All" is set for the web
+# root. Amazon Linux 2023 defaults to "AllowOverride None", so the EC2 user
+# data must change it.
+
+# Never list folder contents (e.g. /assets/).
+Options -Indexes
+
+DirectoryIndex index.html
+
+# instance.json changes per instance, so browsers and proxies must never cache
+# it. Otherwise refreshing would not show the ALB switching instances.
+<IfModule mod_headers.c>
+    <Files "instance.json">
+        Header set Cache-Control "no-store"
+    </Files>
+</IfModule>
+
+# Hide everything that isn't part of the public site. These URLs return
+# 404 Not Found, so visitors can't even tell the files exist.
+
+# Hidden files and folders: .git, .htaccess, .gitignore, ...
+RedirectMatch 404 /\.
+
+# Project files: README, Docker files, config and logs.
+RedirectMatch 404 (?i)\.(md|ini|log|sh|ya?ml)$
+RedirectMatch 404 (?i)/(README|Dockerfile)$
